@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import io from "socket.io-client";
 import "./App.css";
 
-const socket = io("http://anonymous-chat-backend-production.up.railway.app");
+const socket = io("https://anonymous-chat-backend-production.up.railway.app", {
+  transports: ["websocket"],
+});
+
 
 function App() {
   const [message, setMessage] = useState("");
