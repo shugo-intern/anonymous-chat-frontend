@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import io from "socket.io-client";
 import "./App.css";
 
@@ -10,12 +10,17 @@ const socket = io("https://anonymous-chat-backend-production.up.railway.app", {
 function App() {
   const [message, setMessage] = useState("");
   const [chat, setChat] = useState([]);
+  const chatEndRef = useRef(null);
 
   useEffect(() => {
     socket.on("receive_message", (data) => {
       setChat((prev) => [...prev, data]);
     });
   }, []);
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior : "smooth"});
+  },[chat]);
 
   const sendMessage = () => {
     if (message.trim() !== "") {
@@ -26,7 +31,7 @@ function App() {
 
   return (
     <div className="container">
-      <div className="chat-header">匿名チャットルーム</div>
+      <div className="chat-header">れんが亭匿名チャットルーム</div>
 
       <div className="chat-container">
         {chat.map((msg, index) => (
@@ -35,6 +40,7 @@ function App() {
             <p>{msg.message}</p>
           </div>
         ))}
+        <div ref ={chatEndRef} />
       </div>
 
       <div className="input-container">
